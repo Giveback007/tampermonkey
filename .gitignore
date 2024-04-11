@@ -1,7 +1,10 @@
-dist
 node_modules
 .cache
 .temp
 personal-notes.md
 playground
 .env
+._key.ts
+.key.ts
+data
+temp

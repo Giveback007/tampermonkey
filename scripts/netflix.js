@@ -15,7 +15,6 @@
 // -- GENERAL UTILS -- //
 const { log, clear } = console;
 clear();
-log('hello world')
 
 function debounceTimeOut() {
     let timeoutId = null;
@@ -204,28 +203,86 @@ setInterval(() => {
 }, 500);
 // -- INTERVAL -- //
 
-
-
 // -- GAMEPAD -- //
-gameControl.on('connect', (gp) => {
+const btns = {
+    Start: null,
+    Select: null,
+
+    Down: null,
+    Left: null,
+    Up: null,
+    Right: null,
+
+    B: null,
+    A: null,
+    Y: null,
+    X: null,
+
+    L1: null,
+    L2: null,
+    R1: null,
+    R2: null,
+}
+
+window.addEventListener("gamepadconnected", (e) => {
+    const tinyGamepad = e.gamepad.id === "Bluetooth Wireless Controller    (Vendor: 2dc8 Product: 3230)";
+
+    if (tinyGamepad) {
+        btns.Start = 'button11';
+        btns.Select = 'button10';
+
+        btns.Down = 'down0';
+        btns.Left = 'left0';
+        btns.Up = 'up0';
+        btns.Right = 'right0'
+
+        btns.B = 'button1';
+        btns.A = 'button0';
+        btns.X = 'button3';
+        btns.Y = 'l1';
+
+        btns.L2 = 'l2';
+        btns.R2 = 'r2';
+    } else {
+        btns.Start = 'start'
+
+        btns.L1 = 'l1';
+        btns.r1 = 'r1';
+
+        btns.l2 = 'l2';
+        btns.r2 = 'l2';
+
+        btns.B = 'button0';
+        btns.X = 'button3';
+
+        btns.Up = 'button3';
+        btns.Down = 'button13';
+        btns.Left = 'button14';
+        btns.Right = 'button15';
+    }
+});
+
+gameControl.on('connect', async (gp) => {
+    await wait(0);
+
     const keyMap = new Map(Object.entries({
         ...gameCtrlBtns.reduce((obj, btn) => ({...obj, [btn]: () => log(btn)}), {}),
 
-        'start': skipIntro,
+        [btns.Start]: skipIntro,
 
-        'l1': () => playerAddTime(-10000),
-        'r1': () => playerAddTime(+10000),
+        [btns.L1]: () => playerAddTime(-10000),
+        [btns.R1]: () => playerAddTime(+10000),
 
-        'l2': prevSub,
-        'r2': nextSub,
+        [btns.L2]: prevSub,
+        [btns.R2]: nextSub,
 
-        'button0': togglePlayPause, // B
-        'button3': toggleTranslationBlur, // X
+        [btns.B]: togglePlayPause, // B
+        [btns.X]: toggleTranslationBlur, // X
 
-        'button12': wordRepeat, // UP
-        'button13': wordDictClose, // DOWN
-        'button14': wordLeft, // LEFT
-        'button15': wordRight, // RIGHT
+        [btns.Up]: wordRepeat, // UP
+        [btns.Down]: wordDictClose, // DOWN
+        [btns.Left]: wordLeft, // LEFT
+        [btns.Right]: wordRight, // RIGHT
     }));
 
     for (const [gpBtn, fct] of keyMap) {
@@ -284,38 +341,188 @@ const gameCtrlBtns = [
 ]
 
 const wordsToLearn = new Set([
-    'hecho',   'tan',     'parece',  'trabajo', 'cosas',    'nos',
-    'quién',   'estar',   'están',   'alguien', 'estamos',  'uno',
-    'padre',   'sin',     'ir',      'sobre',   'siempre',  'cuando',
-    'sabe',    'día',     'gente',   'otra',    'ahí',      'sus',
-    'noche',   'puedes',  'ni',      'dijo',    'nosotros', 'quiere',
-    'nadie',   'mundo',   'estado',  'ellos',   'podría',   'mismo',
-    'señor',   'tenía',   'dónde',   'tener',   'poco',     'sea',
-    'mira',    'hablar',  'otro',    'madre',   'fuera',    'había',
-    'lugar',   'tal',     'oh',      'gran',     'han',
-    'visto',   'nuestro', 'cosa',    'gusta',   'sido',     'antes',
-    'podemos', 'mis',     'dinero',  'debe',    'allí',     'buena',
-    'parte',   'mujer',   'dice',    'momento', 'tienen',   'desde',
-    'dios',    'seguro',  'nuestra', 'nuevo',   'amigo',
-    'tres',    'hasta',   'será',    'hijo',    'hemos',    'acuerdo',
-    'haber',   'hoy',     'después', 'aún',     'hizo',     'menos',
-    'familia', 'gracias', 'favor',   'buen',    'pasa',     'realmente',
-    'mañana',  'mal',     'dicho',
+    "nunca",
+    "alguien",
+    "feliz",
+    "necesidad",
+    "pasado",
+    "ningún",
+    "volver",
+    "nada",
+    "por",
+    "dónde",
+    "cosa",
+    "toda",
+    "le",
+    "están",
+    "principio",
+    "éxito",
+    "al",
+    "pared",
+    "cualquier",
+    "propósito",
+    "bastante",
+    "mi",
+    "nombre",
+    "cara",
+    "paso",
+    "se",
+    "fuerza",
+    "cuando",
+    "verdad",
+    "muerte",
+    "sitio",
+    "cuidado",
+    "pasa",
+    "carrera",
+    "idea",
+    "luego",
+    "público",
+    "cuál",
+    "cuyo",
+    "aunque",
+    "desde",
+    "me",
+    "corto",
+    "delgado",
+    "espíritu",
+    "salida",
+    "parece",
+    "periódico",
+    "imagen",
+    "zona",
+    "papel",
+    "dios",
+    "duda",
+    "acto",
+    "pueblo",
+    "aire",
+    "equipo",
+    "acuerdo",
+    "así",
+    "relación",
+    "carta",
+    "estudio",
+    "época",
+    "campo",
+    "tamaño",
+    "conjunto",
+    "par",
+    "carácter",
+    "grado",
+    "cuántos",
+    "dolor",
+    "empresa",
+    "estaba",
+    "hasta",
+    "allá",
+    "sé",
+    "cómo",
+    "vidrio",
+    "medida",
+    "ciencia",
+    "falta",
+    "casi",
+    "reunión",
+    "te",
+    "cuadro",
+    "quiénes",
+    "hace",
+    "antiguo",
+    "seguro",
+    "puesto",
+    "claro",
+    "soy",
+    "alegre",
+    "tacaño",
+    "política",
+    "madera",
+    "flaco",
+    "país",
+    "vez",
+    "estar",
+    "fuego",
+    "cierto",
+    "dispuesto",
+    "jamás",
+    "voluntad",
+    "estar",
+    "lado",
+    "seguir",
+    "ambos",
+    "modo",
+    "mayor",
+    "siguiente",
+    "demás",
+    "os",
+    "aquellos",
+    "alguno",
+    "feo",
+    "ustedes",
+    "digas",
+    "acá",
+    "allí",
+    "bonito",
+    "contento",
+    "enojado",
+    "lindo",
+    "sabroso",
+    "cuero",
+    "lugar",
+    "persona",
+    "poder",
+    "proyecto",
+    "partido",
+    "a",
+    "pobre",
+    "verdadero",
+    "próximo",
+    "personal",
+    "muerto",
+    "va",
+    "nos",
+    "usted",
+    "ti",
+    "aprender",
+    "barco",
+    "conocer",
+    "apredizaje",
+    "barato",
+    "débil",
+    "ni",
+    "abrir",
+    "quien",
+    "puerta",
+    "gerente",
+    "tema",
+    "tarea",
+    "como",
+    "hacer",
+    "antes",
+    "buscar",
+    "vale",
+    "moreno",
+    "vida",
+    "estado",
+    "piedra",
+    "su",
+    "alto",
+    "segundo",
+    "anterior",
+    "actual",
+    "era",
+    "algo",
+    "he",
+    "haber",
+    "estoy",
+    "este",
+    "sueño",
+    "brazo",
+    "entrada",
+    "bajo",
+    "si",
     "ese",
     "esos",
-    "aquellas",
-    "antes",
-    "le",
-    "me",
-    "hay",
-    "cómo",
-    "nada",
-    "hacer",
-    "estaba",
-    "nunca",
-    "nos",
-    "te",
-    "conocer",
-    "seguro",
+    "gordo"
 ]);
 // -- DATA --//
